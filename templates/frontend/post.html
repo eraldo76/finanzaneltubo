@@ -1,0 +1,77 @@
+{% extends "frontend/base.html" %}
+{% block meta_description %}{{ article.meta_description }}{% endblock %}
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+<div class="col-md-12"> <!-- Aggiornato per fare spazio alla sidebar -->
+    <!-- Video incorporato, se presente -->
+    {% if article.video and article.video.video_id %}
+    <div class="row mb-3">
+        <div class="col-lg-12"> <!-- Aggiornato per occupare tutta la larghezza disponibile -->
+            <div class="ratio ratio-16x9">
+                <iframe class="rounded-video" src="https://www.youtube.com/embed/{{ article.video.video_id }}" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Titolo e informazioni sull'autore -->
+    <div class="row">
+        <div class="col">
+            <h1>{{ article.h1 }}</h1>
+            <!-- Data di pubblicazione -->
+            {% if article.published_at %}
+            <p class="text-muted mb-3">Pubblicato il {{ article.published_at.strftime('%d/%m/%Y') }}</p>
+            {% endif %}
+            
+        </div>
+    </div>
+    <div id="summary-container"></div>
+    <!-- Contenuto dell'articolo suddiviso per sezioni -->
+    {% for section in article.outlines %}
+    <section class="article-section my-custom-margin">
+        <!-- Sezione con il contenuto -->
+        <div class="section-content">{{ section.content|safe }}</div>
+    </section>
+    {% endfor %}
+    <div class="m-4">Fonte: <a href="{{ article.video.link }}" style="font-size: 13px; font-weight: 800;line-height: 0;" target="_blank">{{ article.video.channel_title
+    }}</a></div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div class="col-md-4 closer-sidebar">
+    <!-- Contenuti della sidebar -->
+    <div class="sidebar-section">
+        <h3>Video Correlati</h3>
+        <!-- Elenco degli articoli correlati alla categoria dell'articolo -->
+        {% for related_article in related_videos %}
+        <div class="video-item mb-3">
+            <!-- Dettagli del video dell'articolo correlato -->
+            <div class="d-flex">
+                <div class="flex-shrink-0">
+                    <!-- Accedi alla thumbnail tramite la relazione article.video -->
+                    <img src="{{ related_article.video.thumbnail }}" alt="{{ related_article.video.title }}" class="img-fluid rounded" style="height:94px;">
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <!-- Titolo dell'articolo con limite di parole e stile CSS -->
+                    <h5>
+                        <a href="{{ url_for('post', category_name=related_article.category.slug, article_slug=related_article.slug) }}" style="font-size: 13px; font-weight: 800;line-height: 0;">
+                            {% set words = related_article.title.split() %}
+                            {% if words|length > 10 %}
+                                {{ words[:10]|join(' ') }}...
+                            {% else %}
+                                {{ related_article.title }}
+                            {% endif %}
+                        </a>
+                    </h5>
+                    <p style="font-size: 9px; font-weight: 500; color:#cccccc;">{{ related_article.video.channel_title }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+    

@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row g-0">
+        <!-- Sidebar a sinistra -->
+        <div class="col-md-3">
+            {% include 'sidebar.html' %}
+        </div>
+
+        <!-- Contenuto a destra -->
+        <div class="col-md-9">
+            <div class="container mt-4">
+                <form method="post">
+                    <div class="mb-3">
+                        <label>Immagine principale dell'articolo</label>
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#pexelsModal" data-main-image="true">Seleziona immagine principale</button>
+                        <div id="mainImagePreview">
+                            {% if article.main_photo %}
+                            <img src="{{ article.main_photo }}" alt="Anteprima immagine principale" class="img-fluid p-2" style="width: 200px;">
+                            {% endif %}
+                        </div>
+                        <input type="hidden" id="mainImageUrl" name="mainImageUrl" value="{{ article.main_photo }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Titolo</label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ article.title }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="keyword" class="form-label">Parola chiave</label>
+                        <input type="text" class="form-control" id="keyword" name="keyword" value="{{ article.keyword }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Categoria</label>
+                        <select class="form-select" id="category" name="category" required>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}" {% if article.category.id == category.id %}selected{% endif %}>{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="meta_description" class="form-label">Meta Description</label>
+                        <textarea class="form-control" id="meta_description" name="meta_description" rows="4" required>{{ article.meta_description }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="h1" class="form-label">H1</label>
+                        <input type="text" class="form-control" id="h1" name="h1" value="{{ article.h1 }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="article_intro" class="form-label">Introduzione Articolo</label>
+                        <textarea class="form-control" id="article_intro" name="article_intro" rows="5" required>{{ article.article_intro }}</textarea>
+                    </div>
+
+                    <h3 class="mt-4">Outlines</h3>
+                    {% for outline in article.outlines %}
+                    <div class="outline-section mt-4">
+                        <div class="mb-3">
+                            <label for="outline_{{ loop.index }}_title" class="form-label">Titolo Outline {{ loop.index }}</label>
+                            <input type="text" class="form-control" id="outline_{{ loop.index }}_title" name="outline_{{ loop.index }}_title" value="{{ outline.title }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="outline_{{ loop.index }}_description" class="form-label">Descrizione Outline {{ loop.index }}</label>
+                            <textarea class="form-control" id="outline_{{ loop.index }}_description" name="outline_{{ loop.index }}_description" rows="4">{{ outline.description }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="outline_{{ loop.index }}_content" class="form-label">Contenuto Outline {{ loop.index }}</label>
+                            <textarea class="form-control" id="outline_{{ loop.index }}_content" name="outline_{{ loop.index }}_content" rows="5">{{ outline.content }}</textarea>
+                        </div>
+                        <div>
+                        
+                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#pexelsModal" data-outline-index="{{ loop.index }}">Aggiungi immagine</button>
+
+                            <div id="pexelsSelectedImage_{{ loop.index }}">
+                                {% if outline.photo %}
+                                <img src="{{ outline.photo }}" alt="Anteprima immagine" class="img-fluid p-2" style="width: 100px;">
+                                {% endif %}
+                            </div>
+                            <input type="hidden" id="selectedImageUrl_{{ loop.index }}" name="selectedImageUrl_{{ loop.index }}" value="{{ outline.photo }}">
+                        </div>
+                
+
+                    </div>
+                    {% endfor %}
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Salva modifiche</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modale Pexels -->
+<div class="modal fade" id="pexelsModal" tabindex="-1" aria-labelledby="pexelsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pexelsModalLabel">Seleziona un'immagine da Pexels</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="pexelsSearch" placeholder="Cerca...">
+          <div id="pexelsResults"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+          <button type="button" class="btn btn-primary" id="selectImage">Seleziona immagine</button>
+        </div>
+      </div>
+    </div>
+</div>
+  
+<script>
+   document.addEventListener("DOMContentLoaded", function(event) {
+    let currentOutlineIndex = 1;  // Inizializza all'outline 1
+    let selectingMainImage = false;
+    
+    console.log("Script in esecuzione...");
+
+    window.setCurrentOutline = function(index) {
+        currentOutlineIndex = index;  // Aggiorna l'indice corrente quando si clicca sul pulsante
+    };
+
+    $('#pexelsSearch').on('keyup', function() {
+        console.log("Evento keyup rilevato!");
+
+        const query = $(this).val();
+        if (query.length > 2) {  // Se la query ha almeno 3 caratteri
+            console.log("Inizio richiesta AJAX con query:", query);
+
+            $.post('/search_pexels', { query: query }, function(data) {
+                console.log("Dati ricevuti da AJAX:", data);
+
+                let htmlContent = '';
+                if (data.photos && Array.isArray(data.photos)) {
+                    data.photos.forEach(photo => {
+                        htmlContent += `<img src="${photo.src.medium}" alt="${photo.url}" class="img-fluid p-2" style="width: 100px; cursor: pointer;" onclick="selectImage('${photo.src.medium}')">`;
+                    });
+                } else {
+                    console.error("Formato dati inaspettato:", data);
+                }
+                $('#pexelsResults').html(htmlContent);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("Errore AJAX:", textStatus, errorThrown);
+            });
+        }
+    });
+
+    window.selectImage = function(url) {
+        if (selectingMainImage) {
+            $('#mainImagePreview').html(`<img src="${url}" alt="Anteprima immagine principale" class="img-fluid p-2" style="width: 200px;">`);
+            $('#mainImageUrl').val(url);
+        } else {
+            $('#pexelsSelectedImage_' + currentOutlineIndex).html(`<img src="${url}" alt="Anteprima immagine" class="img-fluid p-2" style="width: 100px;">`);
+            $('#selectedImageUrl_' + currentOutlineIndex).val(url);
+        }
+        $('#pexelsModal').modal('hide');
+    }
+
+    $('#pexelsModal').on('show.bs.modal', function (event) {
+        // Recupera l'elemento che ha innescato la modale (nel tuo caso, il pulsante)
+        var button = $(event.relatedTarget);
+        
+        selectingMainImage = button.data('main-image') || false;
+
+        if (!selectingMainImage) {
+            // Ottieni l'indice dell'outline dal pulsante
+            currentOutlineIndex = button.data('outline-index');
+        }
+        
+        // Svuota il campo di input e i risultati della ricerca
+        $('#pexelsSearch').val('');
+        $('#pexelsResults').empty();
+    });
+});
+
+    </script>
+    
+
+
+{% endblock %}

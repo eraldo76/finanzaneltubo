@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row g-0">
+        <!-- Sidebar a sinistra -->
+        <div class="col-md-3">
+            {% include 'sidebar.html' %}
+        </div>
+
+        <!-- Contenuto principale a destra -->
+        <div class="col-md-9">
+            <div class="container mt-4">
+                <h1>Riassunto della Trascrizione per Video ID: {{ video_id }}</h1>
+                <form action="{{ url_for('create_article_step1', video_id=video_id) }}" method="post">
+                    <textarea name="summary" rows="10" cols="50">{{ summary }}</textarea><br><br>
+                    <input type="hidden" name="category" value="{{ category }}">
+                    <input type="submit" name="action" value="Rigenera">
+                    <input type="submit" name="action" value="Prossimo Step">
+                    <input type="hidden" name="keyword" value="{{ request.form['keyword'] }}">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

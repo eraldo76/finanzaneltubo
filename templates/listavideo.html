@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row g-0">
+        <!-- Sidebar a sinistra -->
+        <div class="col-md-3">
+            {% include 'sidebar.html' %}
+        </div>
+
+        <!-- Contenuto principale a destra -->
+        <div class="col-md-9">
+            <div class="container mt-4">
+                {% for video in videos %}
+                <div class="row mb-4">
+                    <!-- Thumbnail del video -->
+                    <div class="col-md-2">
+                        <img src="{{ video.thumbnail }}" alt="{{ video.title }}" class="img-thumbnail">
+                    </div>
+
+                    <!-- Informazioni sul video -->
+                    <div class="col-md-8">
+                        
+                        <h4 class="mb-1">
+                            <a href="{{ url_for('visualizza_video', video_id=video.video_id) }}">{{ video.title }}</a>
+                        </h4>
+                        <p class="mb-1">{{ video.duration }} secondi</p>
+                        <p class="mb-1">{{ video.transcription[:50] }}...</p>
+                        <p class="mb-1"><small>{{ video.tags|join(', ') }}</small></p>
+                    </div>
+
+                    <!-- Bottoni azione per il video -->
+                    <div class="col-md-2">
+                        <form action="{{ url_for('elimina_video', video_id=video.video_id) }}" method="post" class="d-inline-block mb-1">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo video?');">Elimina</button>
+                        </form>
+                        <a href="{{ url_for('create_article', video_id=video.video_id) }}" class="btn btn-primary">Crea Articolo</a>
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

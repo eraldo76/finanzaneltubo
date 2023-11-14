@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Il resto del contenuto del tuo template va qui... -->
+<div class="container-fluid">
+  <div class="row g-0">
+    <div class="col-md-3">
+      <!-- Qui dovrebbe andare la tua sidebar -->
+      {% include 'sidebar.html' %}
+    </div>
+    <div class="col-md-9">
+      <!-- Qui dovrebbe andare il tuo contenuto principale -->
+     
+        <!-- Sezione Form -->
+        <div class="container mt-4">
+            <h2>Inserisci l'URL del video di YouTube</h2>
+            <form method="post">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    <label for="{{ form.video_id.id }}" class="form-label">{{ form.video_id.label }}</label>
+                    {{ form.video_id(class="form-control") }}
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Estrai informazioni</button>
+                </div>
+            </form>
+        </div>
+
+<!-- Sezione Informazioni Video (viene mostrata solo se video_info contiene dati) -->
+{% if video_info %}
+<div class="container mt-4">
+    <h2>Informazioni Video Estratte del video {{ video_info.video_id }}</h2>
+    <div class="embed-responsive embed-responsive-16by9">
+        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video_info.video_id }}" allowfullscreen></iframe>
+    </div>
+    <form action="/inserisci" method="post">
+        <input type="hidden" name="video_id" value="{{ video_info.video_id }}">
+        <div class="mb-3">
+            <label for="title" class="form-label">Titolo</label>
+            <input type="text" class="form-control" name="title" value="{{ video_info.title }}">
+        </div>
+        <div class="mb-3">
+            <label for="link" class="form-label">Link</label>
+            <input type="text" class="form-control" name="link" value="{{ video_info.link }}">
+        </div>
+        <div class="mb-3">
+            <label for="duration" class="form-label">Durata</label>
+            <input type="text" class="form-control" name="duration" value="{{ video_info.duration }}">
+        </div>
+        <div class="mb-3">
+            <label for="channel_title" class="form-label">Canale</label>
+            <input type="text" class="form-control" name="channel_title" value="{{ video_info.channel_title }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Thumbnail</label>
+            <img src="{{ video_info.thumbnail }}" alt="{{ video_info.title }}" class="img-thumbnail mb-2">
+            <input type="hidden" name="thumbnail" value="{{ video_info.thumbnail }}">
+        </div>
+        <!-- Aggiungi l'input nascosto per channel_icon_url qui -->
+<input type="hidden" name="channel_icon_url" value="{{ video_info.channel_icon_url }}">
+
+        <div class="mb-3">
+            <label for="transcript" class="form-label">Trascrizione</label>
+            <textarea class="form-control" name="transcript">{{ video_info.transcript }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="tags" class="form-label">Tags</label>
+            <input type="text" class="form-control" name="tags" value="{{ video_info.tags|join(', ') }}">
+        </div>
+        <!-- ... continua con gli altri campi ... -->
+        <div>
+            <button type="submit" class="btn btn-primary">Inserisci informazioni</button>
+        </div>
+    </form>
+</div>
+{% endif %}
+
+
+
+
+      <!--fine contenuto principale-->
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

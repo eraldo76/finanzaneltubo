@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row g-0">
+        <!-- Sidebar a sinistra -->
+        <div class="col-md-3">
+            {% include 'sidebar.html' %}
+        </div>
+
+        <!-- Contenuto a destra -->
+        <div class="col-md-9">
+            <div class="container mt-4">
+                <h2>{{ video.title }}</h2>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.video_id }}" allowfullscreen></iframe>
+                </div>
+                <p><strong>Trascrizione:</strong> {{ video.transcription }}</p>
+<!-- Textarea nascosta con la trascrizione del video -->
+<textarea id="transcriptionTextarea" style="display: none;">{{ video.transcription }}</textarea>
+<button onclick="copyTranscriptionToClipboard()">Copia Trascrizione</button>
+
+                <p><strong>Link:</strong> <a href="{{ video.link }}">{{ video.link }}</a></p>
+                <p><strong>Tags:</strong> {{ video.tags|join(', ') }}</p>
+                <p><strong>Thumbnail:</strong> <img src="{{ video.thumbnail }}" alt="{{ video.title }}"></p>
+                <p><strong>Durata:</strong> {{ video.duration }} secondi</p>
+                <!-- ... Aggiungi qui altri dettagli se necessario ... -->
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function copyTranscriptionToClipboard() {
+        const textarea = document.getElementById('transcriptionTextarea');
+        textarea.style.display = 'block';  // rendi visibile per un attimo (alcuni browser lo richiedono)
+        textarea.select();
+        document.execCommand('copy');
+        textarea.style.display = 'none';   // nascondilo di nuovo
+        alert('Trascrizione copiata nella clipboard!');
+    }
+</script>
+{% endblock %}

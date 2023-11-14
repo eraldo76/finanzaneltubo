@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row g-0">
+        <!-- Sidebar a sinistra -->
+        <div class="col-md-3">
+            {% include 'sidebar.html' %}
+        </div>
+
+        <!-- Contenuto a destra -->
+        <div class="col-md-9">
+            <div class="container mt-4">
+                <h1>{{ article.title }}</h1>
+                <p>{{ article.article_intro }}</p>
+                <hr>
+                <p><strong>Categoria:</strong> {{ article.category.name }}</p>
+                <p><strong>Parola chiave:</strong> {{ article.keyword }}</p>
+                <p><strong>Meta Description:</strong> {{ article.meta_description }}</p>
+                <p><strong>H1:</strong> {{ article.h1 }}</p>
+
+                <h3>Outlines:</h3>
+                {% for outline in article.outlines %}
+                    <div class="outline-section mt-4">
+                        <h4>{{ outline.title }}</h4>
+                        <p>{{ outline.description }}</p>
+                        <p>{{ outline.content|safe }}</p>
+                    </div>
+                {% endfor %}
+                <div class="mt-4">
+                    <a href="{{ url_for('edit_article', slug=article.slug) }}" class="btn btn-primary">Modifica Articolo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

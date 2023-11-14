@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row g-0">
+        <!-- Sidebar a sinistra -->
+        <div class="col-md-3">
+            {% include 'sidebar.html' %}
+        </div>
+
+        <!-- Contenuto principale a destra -->
+        <div class="col-md-9">
+            <div class="container mt-4">
+                <h1>Crea Articolo per Video ID: {{ video_id }}</h1>
+
+                <form action="{{ url_for('create_article_step1', video_id=video_id) }}" method="post">
+                    <label for="keyword">Inserisci la Parola Chiave Principale:</label>
+                    <div class="input-group mb-3">
+                        <input type="text" id="keyword" name="keyword" class="form-control" placeholder="Parola Chiave" required>
+                        <!-- Puoi aggiungere un bottone qui se necessario -->
+                    </div>
+
+                    <label for="category">Seleziona una Categoria:</label>
+                    <div class="input-group mb-3">
+                        <select id="category" name="category" class="form-select" required>
+                            <!-- Qui dovresti inserire un loop per popolare le opzioni con le categorie nel tuo DB -->
+                            {% for cat in categories %}
+                                <option value="{{ cat.slug }}">{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <!-- Modal trigger button -->
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#categoryModal">Aggiungi Categoria</button>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Next</button>
+                </form>
+
+                <!-- Modal per l'aggiunta di una nuova categoria -->
+                <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="categoryModalLabel">Aggiungi Categoria</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form id="categoryForm">
+                            <label for="newCategory">Nome Categoria:</label>
+                            <input type="text" id="newCategory" name="newCategory" required>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                        <button type="button" class="btn btn-primary" onclick="addCategory()">Aggiungi</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+   function addCategory() {
+    let categoryNameInput = document.getElementById('newCategory');
+    let categoryName = categoryNameInput.value;
+
+    fetch('/add_category', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'newCategory=' + encodeURIComponent(categoryName)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Aggiunge la nuova categoria al dropdown
+            let select = document.getElementById('category');
+            let option = document.createElement('option');
+            option.value = data.slug;
+            option.text = data.name;
+            select.add(option);
+
+            // Seleziona la nuova categoria
+            select.value = data.slug;
+
+            // Chiudi la modale
+            var categoryModalElement = document.getElementById('categoryModal');
+            var categoryModal = bootstrap.Modal.getInstance(categoryModalElement);
+            categoryModal.hide();
+
+            // Pulisci l'input text della modale
+            categoryNameInput.value = "";
+        } else {
+            alert("Errore: " + data.error);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert("Si è verificato un errore durante l'aggiunta della categoria.");
+    });
+}
+
+
+</script>
+
+{% endblock %}

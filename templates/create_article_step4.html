@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row g-0">
+        <!-- Sidebar a sinistra -->
+        <div class="col-md-3">
+            {% include 'sidebar.html' %}
+        </div>
+
+        <!-- Contenuto principale a destra -->
+        <div class="col-md-9">
+            <div class="container mt-4">
+                <h3 class="mb-3">Step 4: Genera Contenuti</h3>
+
+                <form method="post" action="{{ url_for('create_article_step4', video_id=video_id) }}">
+
+                    <fieldset>
+                        <legend>Contenuto Generato:</legend>
+
+                        <label for="generated_content">Generated Content:</label>
+                        <textarea id="generated_content" name="generated_content" rows="10" cols="50">{{ content }}</textarea><br><br>
+                    </fieldset>
+                    <input type="hidden" name="form_submitted" value="yes">
+
+                    <input type="submit" class="btn btn-primary" value="Salva">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

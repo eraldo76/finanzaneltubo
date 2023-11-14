@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row g-0">
+    <div class="col-md-3">
+      <!-- Qui dovrebbe andare la tua sidebar -->
+      {% include 'sidebar.html' %}
+    </div>
+    <div class="col-md-9">
+      <!-- Qui dovrebbe andare il tuo contenuto principale -->
+      <h1>Ciao {{ user.first_name }}!</h1>
+    </div>
+  </div>
+</div>
+{% endblock %}
