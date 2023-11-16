@@ -14,7 +14,7 @@ from pymongo import MongoClient
 import mongoengine
 from forms import VideoForm, RegistrationForm, LoginForm
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
-from settings import YOUTUBE_API_KEY, SECRET_KEY, PEXELS_API_KEY, PEXELS_BASE_URL
+from settings import YOUTUBE_API_KEY, SECRET_KEY, PEXELS_API_KEY, PEXELS_BASE_URL, MONGODB_USERNAME, MONGODB_PASSWORD
 import requests
 import json
 import logging
@@ -43,13 +43,22 @@ file_handler.setLevel(logging.INFO)
 app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.INFO)
 
-# Inizializza il client MongoDB
-client = MongoClient('mongodb://localhost:27017/')
-db = client['finanzaneltubo']
+# # Inizializza il client MongoDB
+# client = MongoClient('mongodb://localhost:27017/')
+# db = client['finanzaneltubo']
 
-# Stabilisci la connessione di default
-mongoengine.connect(db='finanzaneltubo', host='mongodb://localhost:27017/')
+# # Stabilisci la connessione di default
+# mongoengine.connect(db='finanzaneltubo', host='mongodb://localhost:27017/')
 
+
+# Nome del database
+db_name = 'finanzaneltubo'
+
+# Stringa di connessione a MongoDB Atlas
+mongo_uri = f"mongodb+srv://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@finanzaneltubo.vhhavoe.mongodb.net/{db_name}"
+
+# Stabilisci la connessione con MongoDB Atlas
+connect(db=db_name, host=mongo_uri)
 login_manager = LoginManager(app)
 # Redirect to register view if user is not logged in
 login_manager.login_view = "login"
