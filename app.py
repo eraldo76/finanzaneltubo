@@ -921,3 +921,8 @@ def category_page(category_slug):
 @app.route('/privacy-policy')
 def privacy_policy():
     return render_template('frontend/privacy-policy.html')
+
+
+# main
+if __name__ == "__main__":
+    app.run(debug=True)
