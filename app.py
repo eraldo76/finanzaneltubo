@@ -11,7 +11,7 @@ from flask_dance.consumer import OAuth2ConsumerBlueprint
 from flask_dance.consumer.storage import MemoryStorage
 from models import User, Video, Article, Outline, Category
 from pymongo import MongoClient
-import mongoengine
+from mongoengine import connect
 from forms import VideoForm, RegistrationForm, LoginForm
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
 from settings import YOUTUBE_API_KEY, SECRET_KEY, PEXELS_API_KEY, PEXELS_BASE_URL, MONGODB_USERNAME, MONGODB_PASSWORD
