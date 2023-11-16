@@ -52,7 +52,7 @@ app.logger.setLevel(logging.INFO)
 
 
 # Nome del database
-db_name = 'finanzaneltub'
+db_name = 'finanzaneltubo'
 
 # Stringa di connessione a MongoDB Atlas
 mongo_uri = f"mongodb+srv://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@finanzaneltubo.vhhavoe.mongodb.net/{db_name}"
