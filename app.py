@@ -14,7 +14,7 @@ from models import User, Video, Article, Outline, Category
 from mongoengine import connect
 from forms import VideoForm, RegistrationForm, LoginForm
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
-from settings import YOUTUBE_API_KEY, SECRET_KEY, PEXELS_API_KEY, PEXELS_BASE_URL, MONGODB_USERNAME, MONGODB_PASSWORD
+from settings import YOUTUBE_API_KEY, SECRET_KEY, PEXELS_API_KEY, PEXELS_BASE_URL
 import requests
 import json
 import logging
@@ -46,10 +46,10 @@ app.logger.setLevel(logging.INFO)
 # Nome del database
 db_name = 'finanzaneltubo'
 
-# Stringa di connessione a MongoDB Atlas
-mongo_uri = f"mongodb+srv://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@finanzaneltubo.vhhavoe.mongodb.net/{db_name}?retryWrites=true&w=majority"
-client = pymongo.MongoClient(mongo_uri)
-# Stabilisci la connessione con MongoDB Atlas
+# Stringa di connessione per MongoDB locale
+mongo_uri = f"mongodb://localhost:27017/{db_name}"
+
+# Stabilisci la connessione con MongoDB locale
 connect(db=db_name, host=mongo_uri, alias='default')
 
 
