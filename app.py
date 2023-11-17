@@ -10,7 +10,8 @@ from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
 from flask_dance.consumer import OAuth2ConsumerBlueprint
 from flask_dance.consumer.storage import MemoryStorage
 from models import User, Video, Article, Outline, Category
-from pymongo import MongoClient
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 from mongoengine import connect
 from forms import VideoForm, RegistrationForm, LoginForm
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
@@ -55,7 +56,7 @@ app.logger.setLevel(logging.INFO)
 db_name = 'finanzaneltubo'
 
 # Stringa di connessione a MongoDB Atlas
-mongo_uri = f"mongodb+srv://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@finanzaneltubo.vhhavoe.mongodb.net/{db_name}"
+mongo_uri = f"mongodb+srv://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@finanzaneltubo.vhhavoe.mongodb.net/?retryWrites=true&w=majority"
 
 # Stabilisci la connessione con MongoDB Atlas
 connect(db=db_name, host=mongo_uri)
