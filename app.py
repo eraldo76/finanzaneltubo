@@ -46,8 +46,8 @@ app.logger.setLevel(logging.INFO)
 # Nome del database
 db_user = MONGODB_USERNAME
 db_password = MONGODB_PASSWORD
-db_name = 'finanzaneltubo'
-mongo_uri = f"mongodb://{db_user}:{db_password}@localhost:27017/{db_name}"
+db_name = 'ServerlessInstance0'
+mongo_uri = "mongodb+srv://Eraldo:gileja23!@serverlessinstance0.2edd7v9.mongodb.net/"
 
 # Stabilisci la connessione con MongoDB locale
 connect(db=db_name, host=mongo_uri, alias='default')
