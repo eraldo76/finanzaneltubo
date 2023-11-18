@@ -14,7 +14,7 @@ from models import User, Video, Article, Outline, Category
 from mongoengine import connect
 from forms import VideoForm, RegistrationForm, LoginForm
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
-from settings import YOUTUBE_API_KEY, SECRET_KEY, PEXELS_API_KEY, PEXELS_BASE_URL
+from settings import YOUTUBE_API_KEY, SECRET_KEY, PEXELS_API_KEY, PEXELS_BASE_URL, MONGODB_USERNAME, MONGODB_PASSWORD
 import requests
 import json
 import logging
@@ -44,10 +44,10 @@ app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.INFO)
 
 # Nome del database
+db_user = MONGODB_USERNAME
+db_password = MONGODB_PASSWORD
 db_name = 'finanzaneltubo'
-
-# Stringa di connessione per MongoDB locale
-mongo_uri = f"mongodb://localhost:27017/{db_name}"
+mongo_uri = f"mongodb://{db_user}:{db_password}@localhost:27017/{db_name}"
 
 # Stabilisci la connessione con MongoDB locale
 connect(db=db_name, host=mongo_uri, alias='default')
