@@ -9,9 +9,11 @@ from flask_dance.contrib.facebook import make_facebook_blueprint
 from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
 from flask_dance.consumer import OAuth2ConsumerBlueprint
 from flask_dance.consumer.storage import MemoryStorage
-from flask_pymongo import pymongo
-from models import User, Video, Article, Outline, Category
 from mongoengine import connect
+
+# from flask_pymongo import pymongo
+from models import User, Video, Article, Outline, Category
+
 from forms import VideoForm, RegistrationForm, LoginForm
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
 from settings import YOUTUBE_API_KEY, SECRET_KEY, PEXELS_API_KEY, PEXELS_BASE_URL, MONGODB_USERNAME, MONGODB_PASSWORD
@@ -43,13 +45,11 @@ file_handler.setLevel(logging.INFO)
 app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.INFO)
 
-# Nome del database
-db_user = MONGODB_USERNAME
-db_password = MONGODB_PASSWORD
-db_name = 'ServerlessInstance0'
-mongo_uri = "mongodb+srv://Eraldo:gileja23!@serverlessinstance0.2edd7v9.mongodb.net/"
 
-# Stabilisci la connessione con MongoDB locale
+# Nome del database
+db_name = 'ServerlessInstance0'
+mongo_uri = "mongodb+srv://Eraldo:gileja23@serverlessinstance0.2edd7v9.mongodb.net/"
+
 connect(db=db_name, host=mongo_uri, alias='default')
 
 
