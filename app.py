@@ -1,4 +1,5 @@
 # Assumendo che tu stia usando la libreria "python-slugify"
+import os
 from slugify import slugify
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify, flash, get_flashed_messages, abort, g
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
@@ -13,7 +14,7 @@ from mongoengine import connect
 from models import User, Video, Article, Outline, Category
 from forms import VideoForm, RegistrationForm, LoginForm
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
-from settings import YOUTUBE_API_KEY, SECRET_KEY, PEXELS_API_KEY, PEXELS_BASE_URL, MONGODB_USERNAME, MONGODB_PASSWORD
+from settings import YOUTUBE_API_KEY, SECRET_KEY, PEXELS_API_KEY, PEXELS_BASE_URL
 import requests
 import json
 import logging
@@ -43,8 +44,12 @@ app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.INFO)
 
 
-# Nome del database
-connect(host="mongodb+srv://doadmin:Uczd18Vo5074D62f@fnt-mongodb-b69449db.mongo.ondigitalocean.com/?authMechanism=DEFAULT")
+MONGODB_USERNAME = os.getenv('MONGODB_USERNAME')
+MONGODB_PASSWORD = os.getenv('MONGODB_PASSWORD')
+
+connect(
+    host=f"mongodb+srv://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@fnt-mongodb-b69449db.mongo.ondigitalocean.com/?authMechanism=DEFAULT")
+
 login_manager = LoginManager(app)
 # Redirect to register view if user is not logged in
 login_manager.login_view = "login"
