@@ -47,6 +47,7 @@ app.logger.setLevel(logging.INFO)
 MONGODB_USERNAME = os.getenv('MONGODB_USERNAME')
 MONGODB_PASSWORD = os.getenv('MONGODB_PASSWORD')
 
+
 connect(
     host=f"mongodb+srv://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@fnt-mongodb-b69449db.mongo.ondigitalocean.com/?authMechanism=DEFAULT")
 
