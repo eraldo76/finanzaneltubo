@@ -49,7 +49,7 @@ MONGODB_PASSWORD = os.getenv('MONGODB_PASSWORD')
 
 
 connect(
-    host=f"mongodb+srv://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@fnt-mongodb-b69449db.mongo.ondigitalocean.com/admin?tls=true&authSource=admin&replicaSet=fnt-mongodb")
+    host=f"mongodb+srv://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@fnt-mongodb-b69449db.mongo.ondigitalocean.com/test?tls=true&authSource=admin&replicaSet=fnt-mongodb")
 login_manager = LoginManager(app)
 # Redirect to register view if user is not logged in
 login_manager.login_view = "login"
