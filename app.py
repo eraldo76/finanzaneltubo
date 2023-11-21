@@ -54,7 +54,7 @@ encoded_password = quote_plus(MONGODB_PASSWORD)
 uri = f"mongodb+srv://{encoded_username}:{encoded_password}@fnt-mongodb-b69449db.mongo.ondigitalocean.com/test?tls=true&authSource=admin&replicaSet=fnt-mongodb"
 
 connect(host=uri)
-print(uri)
+
 login_manager = LoginManager(app)
 # Redirect to register view if user is not logged in
 login_manager.login_view = "login"
