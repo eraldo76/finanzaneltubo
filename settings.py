@@ -8,3 +8,6 @@ OPENAI_MODEL = 'gpt-4'
 
 PEXELS_API_KEY = 'azSlqa1jyPRpZ4zo6AMu2U6Q0u9N19qXMzn4XvbPc121T23aCSoMdUZN'
 PEXELS_BASE_URL = 'https://api.pexels.com/v1/search'
+
+PROTOCOLLO = "http://"
+NOME_SITO = '127.0.0.1:5000'

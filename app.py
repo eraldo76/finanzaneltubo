@@ -15,7 +15,7 @@ from mongoengine import *
 from models import User, Video, Article, Outline, Category
 from forms import VideoForm, RegistrationForm, LoginForm
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
-from settings import YOUTUBE_API_KEY, SECRET_KEY, PEXELS_API_KEY, PEXELS_BASE_URL
+from settings import YOUTUBE_API_KEY, SECRET_KEY, PEXELS_API_KEY, PEXELS_BASE_URL, NOME_SITO, PROTOCOLLO
 import requests
 import json
 import logging
@@ -936,6 +936,39 @@ def category_page(category_slug):
 @app.route('/privacy-policy')
 def privacy_policy():
     return render_template('frontend/privacy-policy.html')
+
+
+@app.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    # Crea un elemento XML
+    urlset = ET.Element(
+        'urlset', xmlns='http://www.sitemaps.org/schemas/sitemap/0.9')
+
+    # Aggiungi URL per ogni articolo pubblicato
+    articles = Article.objects(published=True)
+    for article in articles:
+        url = ET.SubElement(urlset, 'url')
+        ET.SubElement(
+            url, 'loc').text = f"{PROTOCOLLO}{NOME_SITO}/{article.category.slug}/{article.slug}"
+        if article.published_at:
+            ET.SubElement(url, 'lastmod').text = article.published_at.strftime(
+                "%Y-%m-%d")
+
+    # Aggiungi URL per ogni categoria
+    categories = Category.objects()
+    for category in categories:
+        url = ET.SubElement(urlset, 'url')
+        ET.SubElement(
+            url, 'loc').text = f"{PROTOCOLLO}{NOME_SITO}/category/{category.slug}"
+
+    # Crea il sitemap
+    sitemap_xml = ET.tostring(urlset)
+
+    # Crea una response
+    response = make_response(sitemap_xml)
+    response.headers["Content-Type"] = "application/xml"
+
+    return response
 
 
 # main
