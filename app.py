@@ -146,7 +146,20 @@ def post(category_name, article_slug):
     article.views += 1
     article.save()
 
-    return render_template('frontend/post.html', article=article, related_videos=related_videos)
+    article_data = {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "headline": article.title,
+        "author": {
+            "@type": "Person",
+            "name": "finanzaneltubo.it"  # Nome dell'autore
+        },
+        "datePublished": article.published_at.isoformat(),
+        "image": article.main_photo,  # URL dell'immagine principale
+        # Altri campi come descritti nella documentazione di schema.org
+    }
+
+    return render_template('frontend/post.html', article=article, related_videos=related_videos, article_data=article_data)
 
 
 @login_manager.user_loader
