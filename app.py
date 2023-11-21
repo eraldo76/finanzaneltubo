@@ -48,8 +48,8 @@ app.logger.setLevel(logging.INFO)
 MONGODB_USERNAME = os.getenv('MONGODB_USERNAME')
 MONGODB_PASSWORD = os.getenv('MONGODB_PASSWORD')
 
-encoded_username = quote_plus(MONGODB_USERNAME)
-encoded_password = quote_plus(MONGODB_PASSWORD)
+encoded_username = quote_plus(MONGODB_USERNAME.encode('utf-8'))
+encoded_password = quote_plus(MONGODB_PASSWORD.encode('utf-8'))
 
 uri = f"mongodb+srv://{encoded_username}:{encoded_password}@fnt-mongodb-b69449db.mongo.ondigitalocean.com/test?tls=true&authSource=admin&replicaSet=fnt-mongodb"
 
