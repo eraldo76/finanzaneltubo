@@ -10,7 +10,7 @@ from flask_dance.contrib.facebook import make_facebook_blueprint
 from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
 from flask_dance.consumer import OAuth2ConsumerBlueprint
 from flask_dance.consumer.storage import MemoryStorage
-from mongoengine import connect
+from mongoengine import *
 from models import User, Video, Article, Outline, Category
 from forms import VideoForm, RegistrationForm, LoginForm
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
