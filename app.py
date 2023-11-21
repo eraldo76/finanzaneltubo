@@ -25,6 +25,7 @@ import youtube_dl
 from slugify import slugify
 from datetime import datetime
 from article_generation import step2, step3, step4, summarize_transcription
+from urllib.parse import quote_plus
 app = Flask(__name__)
 
 # Configura la chiave segreta
@@ -47,9 +48,13 @@ app.logger.setLevel(logging.INFO)
 MONGODB_USERNAME = os.getenv('MONGODB_USERNAME')
 MONGODB_PASSWORD = os.getenv('MONGODB_PASSWORD')
 
+encoded_username = quote_plus(MONGODB_USERNAME)
+encoded_password = quote_plus(MONGODB_PASSWORD)
 
-connect(
-    host=f"mongodb+srv://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@fnt-mongodb-b69449db.mongo.ondigitalocean.com/test?tls=true&authSource=admin&replicaSet=fnt-mongodb")
+uri = f"mongodb+srv://{encoded_username}:{encoded_password}@fnt-mongodb-b69449db.mongo.ondigitalocean.com/test?tls=true&authSource=admin&replicaSet=fnt-mongodb"
+
+connect(host=uri)
+print(uri)
 login_manager = LoginManager(app)
 # Redirect to register view if user is not logged in
 login_manager.login_view = "login"
