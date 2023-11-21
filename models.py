@@ -66,3 +66,11 @@ class Article(Document):
     published = BooleanField(default=False)
     published_at = DateTimeField()
     views = IntField(default=0)
+
+
+class Website(Document):
+    site_name = StringField(required=True, unique=True)
+    database_name = StringField(required=True)
+
+    def __str__(self):
+        return f"Website: {self.site_name}, Database: {self.database_name}"

@@ -1,7 +1,8 @@
 # Assumendo che tu stia usando la libreria "python-slugify"
 import os
+import xml.etree.ElementTree as ET
 from slugify import slugify
-from flask import Flask, request, render_template, redirect, url_for, session, jsonify, flash, get_flashed_messages, abort, g
+from flask import Flask, request, render_template, redirect, url_for, session, jsonify, flash, get_flashed_messages, abort, g, make_response
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
@@ -49,13 +50,16 @@ app.logger.setLevel(logging.INFO)
 
 MONGODB_USERNAME = os.getenv('MONGODB_USERNAME')
 MONGODB_PASSWORD = os.getenv('MONGODB_PASSWORD')
+NOME_DB = os.getenv('NOME_DB')
 
 encoded_username = quote_plus(MONGODB_USERNAME.encode('utf-8'))
 encoded_password = quote_plus(MONGODB_PASSWORD.encode('utf-8'))
+encoded_nomedb = quote_plus(NOME_DB.encode('utf-8'))
 
-uri = f"mongodb+srv://{encoded_username}:{encoded_password}@fnt-mongodb-b69449db.mongo.ondigitalocean.com/test?tls=true&authSource=admin&replicaSet=fnt-mongodb"
+uri = f"mongodb+srv://{encoded_username}:{encoded_password}@fnt-mongodb-b69449db.mongo.ondigitalocean.com/{encoded_nomedb}?tls=true&authSource=admin&replicaSet=fnt-mongodb"
 
 connect(host=uri)
+print(uri)
 
 login_manager = LoginManager(app)
 # Redirect to register view if user is not logged in
