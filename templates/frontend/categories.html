@@ -19,7 +19,7 @@
             <!-- Dettagli dell'articolo -->
             <div class="col-md-8">
                 <h2><a href="{{ url_for('post', category_name=category.slug, article_slug=article.slug) }}">{{ article.title }}</a></h2>
-                <p class="text-muted">di {{ article.video.channel_title }}</p>
+                <p class="text-muted">dal canale Youtube di {{ article.video.channel_title }}</p>
                 <p>{{ article.article_intro.split(' ')[:35]|join(' ') }}{{ '...' if article.article_intro|wordcount > 35 }}</p>
             </div>
         </div>
