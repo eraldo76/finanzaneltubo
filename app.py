@@ -26,6 +26,8 @@ from slugify import slugify
 from datetime import datetime
 from article_generation import step2, step3, step4, summarize_transcription
 from urllib.parse import quote_plus
+from dotenv import load_dotenv
+load_dotenv()
 app = Flask(__name__)
 
 # Configura la chiave segreta
