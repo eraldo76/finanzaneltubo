@@ -2,7 +2,7 @@
 import os
 import xml.etree.ElementTree as ET
 from slugify import slugify
-from flask import Flask, request, render_template, redirect, url_for, session, jsonify, flash, get_flashed_messages, abort, g, make_response
+from flask import Flask, request, render_template, redirect, url_for, session, jsonify, flash, get_flashed_messages, abort, g, make_response, send_from_directory
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
@@ -969,6 +969,11 @@ def sitemap():
     response.headers["Content-Type"] = "application/xml"
 
     return response
+
+
+@app.route('/ads.txt')
+def serve_ads_txt():
+    return send_from_directory(app.root_path, 'ads.txt')
 
 
 # main
