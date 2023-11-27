@@ -66,6 +66,7 @@ class Article(Document):
     published = BooleanField(default=False)
     published_at = DateTimeField()
     views = IntField(default=0)
+    link_article = StringField()
 
 
 class Website(Document):

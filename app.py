@@ -682,6 +682,8 @@ def create_article_step4(video_id):
                 article_slug = f"{original_slug}-{suffix}"
                 suffix += 1
             article.slug = article_slug
+            # Costruisci il link dell'articolo
+            article.link_article = f"{category_instance.slug}/{article_slug}"
 
             try:
                 article.save()
