@@ -1,11 +1,22 @@
 {% extends "frontend/base.html" %}
 {% block meta_description %}{{ article.meta_description }}{% endblock %}
 {% block title %}{{ article.title }}{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ request.url }}">
+<meta property="og:title" content="{{ article.title }}">
+<meta property="og:image" content="{{ article.main_photo }}">
+<meta property="og:description" content="{{ article.meta_description }}">
+{% endblock %}
+
+
 {% block head_extra %}
 <script type="application/ld+json">
     {{ article_data | tojson | safe }}
 </script>
 {% endblock %}
+
 {% block content %}
 <div class="col-md-12"> <!-- Aggiornato per fare spazio alla sidebar -->
     <!-- Video incorporato, se presente -->
